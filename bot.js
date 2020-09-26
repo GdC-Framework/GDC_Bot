@@ -7,8 +7,7 @@ const client = new Discord.Client({
 });
 const moment = require("moment");
 
-const keywordPatterns = require("./patterns/keywords");
-const screenshotsRoom = require("./patterns/screenshotsRoom");
+const { keywordPatterns, screenshotsRoom } = require("./patterns");
 const { sendMessage } = require("./utils/discord");
 require("./utils/moment-fr");
 const { shortUrl } = require("./utils/string");
