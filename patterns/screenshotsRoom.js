@@ -3,7 +3,7 @@ const {
   sendMessage,
   replyMessage,
   deleteMessage,
-} = require("../../utils/discord");
+} = require("../utils/discord");
 
 /*
   Structure screenshotsAuthors:
@@ -16,18 +16,6 @@ const screenshotsAuthors = {};
 const timeBetweenMessage = 60 * 60 * 20; // 20 hours in seconds
 
 const IDChannelScreenshots = "434310515762790430";
-
-module.exports = (message, client) => {
-  if (message.channel.id === IDChannelScreenshots) {
-    if (hasImage(message)) {
-      if (canSendMessage(message)) {
-        updateLastValidMessage(message);
-      } else {
-        handleWarning({ message, client });
-      }
-    }
-  }
-};
 
 const hasImage = (message) =>
   (message.attachments && message.attachments.size > 0) ||
@@ -93,4 +81,16 @@ const handleWarning = ({ message, client }) => {
   }
 
   screenshotsAuthors[message.author.id].nbWarning += 1;
+};
+
+module.exports = (message, client) => {
+  if (message.channel.id === IDChannelScreenshots) {
+    if (hasImage(message)) {
+      if (canSendMessage(message)) {
+        updateLastValidMessage(message);
+      } else {
+        handleWarning({ message, client });
+      }
+    }
+  }
 };

@@ -1,27 +1,34 @@
+/* eslint-disable no-plusplus */
 require("dotenv").config();
 const Discord = require("discord.js");
 
 const client = new Discord.Client({
   partials: ["USER", "MESSAGE", "CHANNEL", "REACTION"],
 });
-const util = require("util");
-const stringify = require("json-stringify");
 const moment = require("moment");
 
-const {
-  engine: JDRPatterns,
-  eachMessage: JDREachMessage,
-  events,
-} = require("./patterns/509469823172870144");
-const keywordGDCPatterns = require("./patterns/115899998352179203/keywords");
-const screenshotsRoom = require("./patterns/115899998352179203/screenshotsRoom");
+const keywordPatterns = require("./patterns/keywords");
+const screenshotsRoom = require("./patterns/screenshotsRoom");
 const { sendMessage } = require("./utils/discord");
 require("./utils/moment-fr");
 const { shortUrl } = require("./utils/string");
 
 const detectGdcMessage = process.env.DEV_MODE_GDC == "true";
-
 moment.locale("fr");
+
+const debugLog = ({ prefix, message, content = true }) => {
+  console.log(
+    `${prefix}: ${message.member.guild.name} (${message.member.guild.id})/${
+      message.channel.name
+    } (${message.channel.parentID}/${message.channel.id}) - ${
+      message.author.username
+    } (${message.author.id} - Groups [${message.member.roles.map(
+      ({ name }) => name
+    )}]) (Attachments ${message.attachments && message.attachments.size}): ${
+      content ? message.content : ""
+    }`
+  );
+};
 
 client.on("ready", () => {
   console.log("I am ready!");
@@ -63,7 +70,7 @@ client.on("message", async (message) => {
     }
 
     if (detectGdcMessage) {
-      keywordGDCPatterns(message, client);
+      keywordPatterns(message, client);
       screenshotsRoom(message, client);
     }
   } catch (ex) {
@@ -96,9 +103,6 @@ if (process.env.WELCOME_CHANNEL) {
   });
 }
 
-// Init Jdr events
-events(client);
-
 let autoRecoTimes = 0;
 const autoReconnect = () =>
   client
@@ -108,26 +112,12 @@ const autoReconnect = () =>
       autoRecoTimes++;
       setTimeout(() => {
         autoReconnect();
-      }, Math.pow(autoRecoTimes, 2) * 500);
+      }, (autoRecoTimes ** 2) * 500);
     })
-    .then((e) => {
+    .then(() => {
       autoRecoTimes = 0;
     });
 
 autoReconnect();
-
-const debugLog = ({ prefix, message, content = true }) => {
-  console.log(
-    `${prefix}: ${message.member.guild.name} (${message.member.guild.id})/${
-      message.channel.name
-    } (${message.channel.parentID}/${message.channel.id}) - ${
-      message.author.username
-    } (${message.author.id} - Groups [${message.member.roles.map(
-      ({ name }) => name
-    )}]) (Attachments ${message.attachments && message.attachments.size}): ${
-      content ? message.content : ""
-    }`
-  );
-};
 
 module.exports = client;
