@@ -19,7 +19,7 @@ TODO
   },
   {
     regex: /^!as/i,
-    roleNames: ["Admins"],
+    roleNames: ["Admins", "Techniques"],
     responses: (message) => {
       const regExResult = /^!as (.+)$/is.exec(message.content);
       return regExResult[1];
@@ -52,7 +52,7 @@ TODO
         
 1ere date: Si non spécifié prend le lendemain
 2ème date: Si non spécifié propose 7 jours suivant la première date`,
-    roleNames: ["Admins"],
+    roleNames: ["Admins", "Techniques"],
     responses: async (message, client, config) => {
       const regExResult = config.regex.exec(message.content);
 

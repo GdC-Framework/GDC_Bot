@@ -14,7 +14,7 @@ const {
 */
 const screenshotsAuthors = {};
 const timeBetweenMessage = 60 * 60 * 20; // 20 hours in seconds
-// const IDChannelAdmin = '116601499177451524' // ADMIN for test!
+
 const IDChannelScreenshots = "434310515762790430";
 
 module.exports = (message, client) => {
@@ -23,12 +23,9 @@ module.exports = (message, client) => {
       if (canSendMessage(message)) {
         updateLastValidMessage(message);
       } else {
-        // console.log('Warning');
         handleWarning({ message, client });
       }
     }
-
-    // console.log('Result: ', JSON.stringify(screenshotsAuthors));
   }
 };
 
@@ -46,11 +43,6 @@ const hasImage = (message) =>
 const canSendMessage = (message) => {
   if (screenshotsAuthors[message.author.id]) {
     const { lastValidMessage } = screenshotsAuthors[message.author.id];
-    const screenshotRole = message.guild.roles.find("name", "screenshot");
-
-    if (message.member.roles.has(screenshotRole.id) === true) {
-      return true;
-    }
 
     // Check if message is too soon
     const previousMoment = moment
