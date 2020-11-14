@@ -1,9 +1,8 @@
 /* eslint-disable no-plusplus */
-require("dotenv").config();
 const Discord = require("discord.js");
 
 const client = new Discord.Client({
-  partials: ["USER", "MESSAGE", "CHANNEL", "REACTION"],
+  // partials: ["USER", "MESSAGE", "CHANNEL", "REACTION"],
 });
 const moment = require("moment");
 
@@ -12,7 +11,6 @@ const { sendMessage } = require("./utils/discord");
 require("./utils/moment-fr");
 const { shortUrl } = require("./utils/string");
 
-const detectGdcMessage = process.env.DEV_MODE_GDC == "true";
 moment.locale("fr");
 
 const debugLog = ({ prefix, message, content = true }) => {
@@ -68,10 +66,8 @@ client.on("message", async (message) => {
       );
     }
 
-    if (detectGdcMessage) {
-      keywordPatterns(message, client);
-      screenshotsRoom(message, client);
-    }
+    keywordPatterns(message, client);
+    screenshotsRoom(message, client);
   } catch (ex) {
     console.error("Generic Error", ex);
   } finally {

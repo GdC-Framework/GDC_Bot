@@ -6,18 +6,15 @@ const { compareFolders } = require('../utils/files')
 module.exports = [
 	{
 		exactMatch: 'ping',
-    documentationShort: `Sûrement une énigme ?`,
+    	documentationShort: `Sûrement une énigme ?`,
 		responses: 'pong',
 	},
 	{
 		regex: /^!as/i,
-    regexDoc: '!as [commande]',
-    documentationShort: `Affiche un message au nom du bot`,
+		regexDoc: '!as [commande]',
+		documentationShort: `Affiche un message au nom du bot`,
 		roleNames: ['Admins', 'Techniques'],
-		responses: (message) => {
-			const regExResult = /^!as (.+)$/is.exec(message.content)
-			return regExResult[1]
-		},
+		responses: (message) => message.content.substring(4),
 		deleteOriginalMessage: true,
 	},
 	{
