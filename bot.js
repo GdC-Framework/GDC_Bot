@@ -78,6 +78,8 @@ client.on("message", async (message) => {
 if (process.env.WELCOME_CHANNEL) {
   client.on("guildMemberAdd", async (member) => {
     try {
+      console.log('New member', member)
+
       // Get the channel where send the welcome message
       const channel = member.guild.channels.find(
         (ch) => ch.name === process.env.WELCOME_CHANNEL
